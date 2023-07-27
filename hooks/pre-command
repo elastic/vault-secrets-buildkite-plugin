@@ -1,0 +1,34 @@
+#!/bin/bash
+
+MAX_RETRIES=3
+
+retry() {
+  local retries=0
+  local exit_code=1
+  local command=$*
+
+  while [ "$retries" -lt "$MAX_RETRIES" ] && [ "$exit_code" -ne 0 ]; do
+    eval "$command"
+    exit_code=$?
+
+    if [ "$exit_code" -ne 0 ]; then
+      sleep 5
+    fi
+
+    retries=$((retries + 1))
+  done
+
+  if [ "$exit_code" -ne 0 ]; then
+    echo "Command failed after $MAX_RETRIES retries." >&2
+    exit 1
+  fi
+}
+
+if ! command -v vault >/dev/null 2>&1; then
+  echo "Could not find the vault cli"
+  exit 1
+fi
+
+SECRET=$(retry vault read -field="${BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD}" "${BUILDKITE_PLUGIN_VAULT_SECRETS_SECRET_PATH}")
+eval "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}='${SECRET}'"
+export "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR?}"

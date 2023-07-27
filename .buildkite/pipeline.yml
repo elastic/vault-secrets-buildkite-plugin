@@ -5,3 +5,19 @@ steps:
       - elastic/hermit#v1.0.0
     agents:
       image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+  - label: ":sparkles: Buildkite plugin Lint"
+    plugins:
+      - plugin-linter#v3.0.0:
+          id: elastic/vault-secrets
+    agents:
+      provider: "gcp"
+      image: family/ci-ubuntu-2204
+  - label: "Unit test"
+    command: ".buildkite/scripts/test.sh"
+    plugins:
+      - elastic/vault-secrets:
+          secret_path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
+          field: "message"
+          env_var: "MESSAGE"
+    agents:
+      image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
