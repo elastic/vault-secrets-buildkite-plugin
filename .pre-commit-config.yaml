@@ -1,0 +1,38 @@
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: "v4.4.0"
+    hooks:
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-toml
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: no-commit-to-branch
+      - id: trailing-whitespace
+
+  - repo: "https://github.com/syntaqx/git-hooks"
+    rev: "v0.0.18"
+    hooks:
+      - id: shfmt
+        exclude: (^bin/activate-hermit|^bin/hermit)
+      - id: shellcheck
+        exclude: (^bin/activate-hermit|^bin/hermit)
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: "0.23.3"
+    hooks:
+      - id: check-buildkite
+        files: (^.buildkite/pipeline.yml$)
+
+  - repo: https://github.com/jmlrt/check-yamlschema
+    rev: "v0.0.3"
+    hooks:
+      - id: check-yamlschema
+        # check-jsonschema doesn't support multi-docs yaml file
+        # https://github.com/python-jsonschema/check-jsonschema/issues/222
+        files: ^catalog-info.yaml$
