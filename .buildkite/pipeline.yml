@@ -15,7 +15,7 @@ steps:
   - label: "Unit test"
     command: ".buildkite/scripts/test.sh"
     plugins:
-      - .:
+      - elastic/vault-secrets:
           secret_path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
           field: "message"
           env_var: "MESSAGE"
