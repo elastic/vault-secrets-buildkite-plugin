@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 printf "BUILDKITE_REDACTED_VARS: %s\n\n" "$BUILDKITE_REDACTED_VARS"
 
