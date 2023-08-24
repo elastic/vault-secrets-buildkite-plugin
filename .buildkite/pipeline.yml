@@ -21,3 +21,11 @@ steps:
           env_var: "MESSAGE"
     agents:
       image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+  - label: "Unit test multi field"
+    command: ".buildkite/scripts/test-multi-field.sh"
+    plugins:
+      - elastic/vault-secrets#$BUILDKITE_COMMIT:
+          path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
+          env_var: "MESSAGE"
+    agents:
+      image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
