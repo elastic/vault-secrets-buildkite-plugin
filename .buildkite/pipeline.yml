@@ -47,7 +47,7 @@ steps:
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
       - label: "Unit test field with variable based on secret path and depth 1"
-        command: ".buildkite/scripts/test-field.sh"
+        command: ".buildkite/scripts/test-field-path-depth-1.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
@@ -56,7 +56,7 @@ steps:
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
       - label: "Unit test json with variable based on secret path and depth 1"
-        command: ".buildkite/scripts/test-json.sh"
+        command: ".buildkite/scripts/test-json-path-depth-1.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
@@ -64,7 +64,7 @@ steps:
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
       - label: "Unit test field with variable based on secret path and depth 3"
-        command: ".buildkite/scripts/test-field.sh"
+        command: ".buildkite/scripts/test-field-path-depth-3.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
@@ -73,7 +73,7 @@ steps:
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
       - label: "Unit test json with variable based on secret path and depth 1"
-        command: ".buildkite/scripts/test-json.sh"
+        command: ".buildkite/scripts/test-json-path-depth-3.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
