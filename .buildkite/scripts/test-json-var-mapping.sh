@@ -10,7 +10,7 @@ fi
 is_expected_message=$(echo "$MESSAGE" | grep -c "$EXPECTED_MESSAGE")
 
 if [ "$is_expected_message" -eq 1 ]; then
-  echo "Message is correct: $MESSAGE"
+  echo "MESSAGE is correct: $MESSAGE"
   exit 0
 else
   echo "[ERROR] Expected: $EXPECTED_MESSAGE - Got: $MESSAGE"

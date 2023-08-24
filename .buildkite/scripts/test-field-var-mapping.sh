@@ -8,7 +8,7 @@ if [ -z "$MESSAGE" ]; then
 fi
 
 if [ "$MESSAGE" == "$EXPECTED_MESSAGE" ]; then
-  echo "Message is correct: $MESSAGE"
+  echo "MESSAGE is correct: $MESSAGE"
   exit 0
 else
   echo "[ERROR] Expected: $EXPECTED_MESSAGE - Got: $MESSAGE"
