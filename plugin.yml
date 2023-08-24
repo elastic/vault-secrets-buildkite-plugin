@@ -6,6 +6,8 @@ configuration:
   properties:
     path:
       type: string
+    path_depth:
+      type: string
     field:
       type: string
     env_var:
