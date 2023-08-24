@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "BUILDKITE_REDACTED_VARS: $BUILDKITE_REDACTED_VARS"
-
 EXPECTED_MESSAGE='"message": "Hello from Vault"'
 
 if [ -z "$TEST_SECRET" ]; then
