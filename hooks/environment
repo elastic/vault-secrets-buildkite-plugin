@@ -3,6 +3,14 @@ set -eo pipefail
 
 MAX_RETRIES=3
 
+check_command() {
+  command=$1
+  if ! command -v "$command" >/dev/null 2>&1; then
+    echo "Could not find the $command cli"
+    exit 1
+  fi
+}
+
 retry() {
   local retries=0
   local exit_code=1
@@ -25,16 +33,14 @@ retry() {
   fi
 }
 
-if ! command -v vault >/dev/null 2>&1; then
-  echo "Could not find the vault cli"
-  exit 1
-fi
+check_command vault
 
 SECRET=""
 if [ -n "${BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD}" ]; then
   SECRET=$(retry vault kv get -field="${BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD}" "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}")
 else
-  SECRET=$(retry vault kv get "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}")
+  check_command jq
+  SECRET=$(retry vault kv get -format=json "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}" | jq -c .data)
 fi
 eval "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}='${SECRET}'"
 export "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR?}"
