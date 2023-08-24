@@ -2,8 +2,6 @@
 
 EXPECTED_MESSAGE="Hello from Vault"
 
-echo "BUILDKITE_REDACTED_VARS: $BUILDKITE_REDACTED_VARS"
-
 if [ -z "$MESSAGE" ]; then
   echo "[ERROR] MESSAGE variable is empty or not defined."
   exit 1

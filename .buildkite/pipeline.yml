@@ -14,8 +14,6 @@ steps:
       image: family/ci-ubuntu-2204
   - label: "Unit test"
     command: ".buildkite/scripts/test.sh"
-    env:
-      BUILDKITE_REDACTED_VARS: "MESSAGE"
     plugins:
       - elastic/vault-secrets#$BUILDKITE_COMMIT:
           secret_path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
