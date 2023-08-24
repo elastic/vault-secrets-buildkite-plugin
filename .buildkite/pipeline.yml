@@ -12,8 +12,8 @@ steps:
     agents:
       provider: "gcp"
       image: family/ci-ubuntu-2204
-  - label: "Unit test field"
-    command: ".buildkite/scripts/test-field.sh"
+  - label: "Unit test field with variable mapping"
+    command: ".buildkite/scripts/test-field-var-mapping.sh"
     plugins:
       - elastic/vault-secrets#$BUILDKITE_COMMIT:
           path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
@@ -21,11 +21,26 @@ steps:
           env_var: "MESSAGE"
     agents:
       image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
-  - label: "Unit test json"
-    command: ".buildkite/scripts/test-json.sh"
+  - label: "Unit test json with variable mapping"
+    command: ".buildkite/scripts/test-json-var-mapping.sh"
     plugins:
       - elastic/vault-secrets#$BUILDKITE_COMMIT:
           path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
           env_var: "MESSAGE"
+    agents:
+      image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+  - label: "Unit test field with variable based on secret path"
+    command: ".buildkite/scripts/test-field.sh"
+    plugins:
+      - elastic/vault-secrets#$BUILDKITE_COMMIT:
+          path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
+          field: "message"
+    agents:
+      image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+  - label: "Unit test json with variable based on secret path"
+    command: ".buildkite/scripts/test-json.sh"
+    plugins:
+      - elastic/vault-secrets#$BUILDKITE_COMMIT:
+          path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
     agents:
       image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
