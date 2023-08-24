@@ -1,6 +1,6 @@
 # Vault Secrets Buildkite Plugin
 
-A buildkite plugin to map Vault secrets to Step environments variables
+A simple buildkite plugin to map a Vault secret to a Step environment variable
 
 ## Usage
 
@@ -12,6 +12,14 @@ steps:
     plugins:
       - elastic/vault-secrets#v0.0.1:
           path: 'secret/ci/elastic-<repo-name>/<secret-name>'
-          field: '<secret-field-name>'
-          env_var: '<environment-variable-mapping-secret>'
+          field: '<secret-field-name>' # OPTIONAL
+          env_var: '<environment-variable-mapping-secret>' # OPTIONAL
 ```
+
+- `field` specifies the exact Vault secret field to retrieve.
+  When `field` isn't defined, the entire secret is retrieved in json format
+- `env_var` specifies the name of the environment variable that will contains the secret.
+  When `env_var` the name of the environment variable will be based on the following format:
+  `<UPPERCASE_SECRET_NAME>[_<UPPERCASE_FIELD_NAME>]_SECRET`
+
+Please refer to the test pipeline and scripts in ths `.buildkite` directory as examples.

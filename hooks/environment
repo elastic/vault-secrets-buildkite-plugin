@@ -21,7 +21,9 @@ generate_variable_name() {
     var_name="${var_name}_$field"
   fi
 
-  final_var_name=$(echo "$var_name" | tr '[:lower:]' '[:upper:]')_SECRET
+  # _SECRET suffix is used to ensure the variable content is redacted in Buildkite logs
+  # https://buildkite.com/docs/pipelines/managing-log-output#redacted-environment-variables
+  final_var_name=$(echo "$var_name" | tr "[:lower:]" "[:upper:]" | tr "-" "_")_SECRET
   echo "$final_var_name"
 }
 
