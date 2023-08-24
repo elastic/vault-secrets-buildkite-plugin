@@ -1,7 +1,5 @@
 steps:
-  - label: "Pre-commit"
-    command: ".buildkite/scripts/pre-commit.sh"
-    plugins:
-      - elastic/hermit#v1.0.0
+  - label: "Test"
+    command: ".buildkite/scripts/test.sh"
     agents:
       image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
