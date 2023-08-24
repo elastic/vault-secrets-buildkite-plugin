@@ -16,7 +16,7 @@ steps:
     command: ".buildkite/scripts/test.sh"
     plugins:
       - elastic/vault-secrets#$BUILDKITE_COMMIT:
-          secret_path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
+          path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
           field: "message"
           env_var: "MESSAGE"
     agents:

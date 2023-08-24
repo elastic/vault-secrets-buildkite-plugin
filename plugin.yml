@@ -4,7 +4,7 @@ author: https://github.com/jmlrt
 requirements: []
 configuration:
   properties:
-    secret_path:
+    path:
       type: string
     field:
       type: string
