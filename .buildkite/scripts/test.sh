@@ -6,6 +6,8 @@ printf "BUILDKITE_REDACTED_VARS: %s\n\n" "$BUILDKITE_REDACTED_VARS"
 MY_SECRET="topsecret"
 printf "MY_SECRET: %s\n\n" "$MY_SECRET"
 
+echo "This is topsecret info"
+
 # VAR_SECRET="hello, VAR"
 # printf "VAR_SECRET: %s\n\n" "$VAR_SECRET"
 
