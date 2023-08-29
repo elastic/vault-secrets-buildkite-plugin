@@ -1,0 +1,76 @@
+#!/bin/bash
+set -eo pipefail
+
+MAX_RETRIES=3
+DEFAULT_PATH_DEPTH=2
+
+check_command() {
+  command=$1
+  if ! command -v "$command" >/dev/null 2>&1; then
+    echo "Could not find the $command cli"
+    exit 1
+  fi
+}
+
+generate_variable_name() {
+  local path=$1
+  local field=$2
+  local depth=$3
+
+  var_name=$(basename "$path")
+
+  # Extract the last N components of the path based on the provided depth
+  var_name=$(echo "$path" | rev | cut -d"/" -f 1-"$depth" | rev | tr "/" "_")
+
+  # Add the field to the variable name if it's defined
+  if [ -n "$field" ]; then
+    var_name="${var_name}_$field"
+  fi
+
+  # _SECRET suffix is used to ensure the variable content is redacted in Buildkite logs
+  # https://buildkite.com/docs/pipelines/managing-log-output#redacted-environment-variables
+  final_var_name=$(echo "$var_name" | tr "[:lower:]" "[:upper:]" | tr "-" "_")_SECRET
+  echo "$final_var_name"
+}
+
+retry() {
+  local retries=0
+  local exit_code=1
+  local command=$*
+
+  while [ "$retries" -lt "$MAX_RETRIES" ] && [ "$exit_code" -ne 0 ]; do
+    eval "$command"
+    exit_code=$?
+
+    if [ "$exit_code" -ne 0 ]; then
+      sleep 5
+    fi
+
+    retries=$((retries + 1))
+  done
+
+  if [ "$exit_code" -ne 0 ]; then
+    echo "Command failed after $MAX_RETRIES retries." >&2
+    exit 1
+  fi
+}
+
+check_command vault
+
+BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_DEPTH=${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_DEPTH:-$DEFAULT_PATH_DEPTH}
+
+secret=""
+if [ -n "${BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD}" ]; then
+  secret=$(retry vault kv get -field="${BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD}" "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}")
+else
+  secret=$(retry vault kv get -format=json "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}")
+fi
+
+if [ -n "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}" ]; then
+  eval "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}='${secret}'"
+  export "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR?}"
+else
+  variable_name=$(generate_variable_name "$BUILDKITE_PLUGIN_VAULT_SECRETS_PATH" "$BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD" "$BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_DEPTH")
+  eval "${variable_name}='${secret}'"
+  export "${variable_name?}"
+fi
