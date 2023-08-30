@@ -1,5 +1,7 @@
 # Vault Secrets Buildkite Plugin
 
+[![Build status](https://badge.buildkite.com/d5246cdaa0cb57cb86f0de499111ee4b4a00ef78941af6ba84.svg)](https://buildkite.com/elastic/vault-secrets-buildkite-plugin)
+
 A simple buildkite plugin to map a Vault secret to a Step environment variable
 
 ## Requirements
