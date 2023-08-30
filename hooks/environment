@@ -63,7 +63,8 @@ secret=""
 if [ -n "${BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD}" ]; then
   secret=$(retry vault kv get -field="${BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD}" "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}")
 else
-  secret=$(retry vault kv get -format=json "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}")
+  check_command jq
+  secret=$(retry vault kv get -format=json "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}" | jq -c .data)
 fi
 
 if [ -n "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}" ]; then

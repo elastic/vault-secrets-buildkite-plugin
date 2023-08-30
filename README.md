@@ -2,6 +2,10 @@
 
 A simple buildkite plugin to map a Vault secret to a Step environment variable
 
+## Requirements
+
+`vault` and `jq` are expected to be installed on your Buildkite worker.
+
 ## Usage
 
 Add the following to your `pipeline.yml`:
