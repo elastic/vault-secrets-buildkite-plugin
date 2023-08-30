@@ -14,7 +14,7 @@ Add the following to your `pipeline.yml`:
 steps:
   - command: "<your-command>"
     plugins:
-      - elastic/vault-secrets#v0.0.1:
+      - elastic/vault-secrets#v0.0.2:
           path: "secret/ci/elastic-<repo-name>/<secret-name>"
           field: "<secret-field-name>" # OPTIONAL
           env_var: "<environment-variable-mapping-secret>" # OPTIONAL
