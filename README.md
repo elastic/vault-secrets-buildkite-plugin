@@ -25,10 +25,14 @@ steps:
 
 - `field` specifies the exact Vault secret field to retrieve.
   When `field` isn't defined, the entire secret is retrieved in json format
-- `env_var` specifies the name of the environment variable that will contains the secret.
-  When `env_var` the name of the environment variable will be based on the following format:
-  `<UPPERCASE_SECRET_NAME>[_<UPPERCASE_FIELD_NAME>]_SECRET`
+- `env_var` specifies the name of the environment variable that will contain the secret.
+  When `env_var` is not specified, the name of the environment variable will be generated
+  using this scheme: `<UPPERCASE_SECRET_NAME>[_<UPPERCASE_FIELD_NAME>]_SECRET`. Note
+  that if you do specify an `env_var`, you should use one of the patterns that will
+  ensure Buildkite will redact the secret, see [the docs][0] for details.
 - `path_depth` specifies the number of elements of the path to use in the variable name when
   `env_var` isn't defined. When not defined the default value is `2`
 
 Please refer to the test pipeline and scripts in ths `.buildkite` directory as examples.
+
+[0]: https://buildkite.com/docs/pipelines/managing-log-output#redacted-environment-variables
