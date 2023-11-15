@@ -14,6 +14,15 @@ steps:
       image: family/ci-ubuntu-2204
   - group: "Unit tests"
     steps:
+      - label: "Unit test for autoredacted custom vars"
+        command: ".buildkite/scripts/test-redact-custom-var.sh"
+        plugins:
+          - elastic/vault-secrets#$BUILDKITE_COMMIT:
+              path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
+              field: "message"
+              env_var: "MESSAGE"
+        agents:
+          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
       - label: "Unit test field with variable mapping"
         command: ".buildkite/scripts/test-field-var-mapping.sh"
         plugins:
