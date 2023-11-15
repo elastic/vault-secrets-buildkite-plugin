@@ -2,6 +2,8 @@
 
 EXPECTED_MESSAGE="[REDACTED]"
 
+echo "$BUILDKITE_REDACTED_VARS"
+
 if [ -z "$MESSAGE" ]; then
   echo "[ERROR] MESSAGE variable is empty or not defined."
   exit 1
