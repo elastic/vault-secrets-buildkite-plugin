@@ -80,7 +80,7 @@ steps:
               path_depth: "3"
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
-      - label: "Validate Path Name"
+      - label: "Unit test variable based on secret path with dots and depth 1"
         command: ".buildkite/scripts/test-path.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
