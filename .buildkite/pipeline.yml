@@ -80,3 +80,9 @@ steps:
               path_depth: "3"
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+      - label: "Unit test to validate secret path"
+        command: ".buildkite/scripts/test-path.sh"
+        plugins:
+          - elastic/vault-secrets#$BUILDKITE_COMMIT:
+              path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test.elastic.co"
+              field: "message"
