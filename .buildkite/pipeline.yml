@@ -85,6 +85,6 @@ steps:
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test.elastic.co"
-              field: "message"
+              path_depth: "1"
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
