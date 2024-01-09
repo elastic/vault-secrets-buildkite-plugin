@@ -81,11 +81,10 @@ steps:
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
       - label: "Validate Path Name"
-        command: ".buildkite/scripts/test-path-name.sh"
+        command: ".buildkite/scripts/test-path.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test.elastic.co"
               field: "message"
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
-
