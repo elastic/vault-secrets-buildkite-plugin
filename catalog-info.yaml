@@ -9,7 +9,7 @@ metadata:
   annotations:
     backstage.io/source-location: url:https://github.com/elastic/vault-secrets-buildkite-plugin/
     github.com/project-slug: elastic/vault-secrets-buildkite-plugin
-    github.com/team-slug: elastic/release-eng
+    github.com/team-slug: elastic/platform-dev-flow
 
   tags:
     - buildkite
@@ -17,7 +17,7 @@ metadata:
 
 spec:
   type: tool
-  owner: group:release-eng
+  owner: group:platform-dev-flow
   lifecycle: beta
 
 ---
@@ -38,7 +38,7 @@ metadata:
 
 spec:
   type: buildkite-pipeline
-  owner: group:release-eng
+  owner: group:platform-dev-flow
   system: buildkite
   implementation:
     apiVersion: buildkite.elastic.dev/v1
@@ -54,3 +54,4 @@ spec:
         everyone:
           access_level: BUILD_AND_READ
         release-eng: {}
+        platform-dev-flow: {}
