@@ -54,5 +54,5 @@ spec:
         everyone:
           access_level: BUILD_AND_READ
         release-eng: {}
-        platform-dev-flow: 
+        platform-dev-flow:
           access_level: MANAGE_BUILD_AND_READ
