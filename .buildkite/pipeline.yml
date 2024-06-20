@@ -11,7 +11,7 @@ steps:
           id: elastic/vault-secrets
     agents:
       provider: "gcp"
-      image: family/ci-ubuntu-2204
+      image: family/core-ubuntu-2204
   - group: "Unit tests"
     steps:
       - label: "Unit test field with variable mapping"
