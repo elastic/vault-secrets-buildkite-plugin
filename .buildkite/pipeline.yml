@@ -7,7 +7,7 @@ steps:
       image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
   - label: ":sparkles: Buildkite plugin Lint"
     plugins:
-      - plugin-linter#v3.0.0:
+      - plugin-linter#v3.3.0:
           id: elastic/vault-secrets
     agents:
       provider: "gcp"
