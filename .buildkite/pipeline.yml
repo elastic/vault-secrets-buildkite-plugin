@@ -4,7 +4,7 @@ steps:
     plugins:
       - elastic/hermit#v1.0.0
     agents:
-      image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+      image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
   - label: ":sparkles: Buildkite plugin Lint"
     plugins:
       - plugin-linter#v3.0.0:
@@ -22,7 +22,7 @@ steps:
               field: "message"
               env_var: "MESSAGE"
         agents:
-          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
       - label: "Unit test json with variable mapping"
         command: ".buildkite/scripts/test-json-var-mapping.sh"
         plugins:
@@ -30,7 +30,7 @@ steps:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
               env_var: "MESSAGE"
         agents:
-          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
       - label: "Unit test field with variable based on secret path"
         command: ".buildkite/scripts/test-field.sh"
         plugins:
@@ -38,14 +38,14 @@ steps:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
               field: "message"
         agents:
-          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
       - label: "Unit test json with variable based on secret path"
         command: ".buildkite/scripts/test-json.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
         agents:
-          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
       - label: "Unit test field with variable based on secret path and depth 1"
         command: ".buildkite/scripts/test-field-path-depth-1.sh"
         plugins:
@@ -54,7 +54,7 @@ steps:
               field: "message"
               path_depth: "1"
         agents:
-          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
       - label: "Unit test json with variable based on secret path and depth 1"
         command: ".buildkite/scripts/test-json-path-depth-1.sh"
         plugins:
@@ -62,7 +62,7 @@ steps:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
               path_depth: "1"
         agents:
-          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
       - label: "Unit test field with variable based on secret path and depth 3"
         command: ".buildkite/scripts/test-field-path-depth-3.sh"
         plugins:
@@ -71,7 +71,7 @@ steps:
               field: "message"
               path_depth: "3"
         agents:
-          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
       - label: "Unit test json with variable based on secret path and depth 1"
         command: ".buildkite/scripts/test-json-path-depth-3.sh"
         plugins:
@@ -79,7 +79,7 @@ steps:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
               path_depth: "3"
         agents:
-          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
       - label: "Unit test variable based on secret path with dots and depth 1"
         command: ".buildkite/scripts/test-path.sh"
         plugins:
@@ -87,4 +87,4 @@ steps:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test.elastic.co"
               path_depth: "1"
         agents:
-          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential"
+          image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
