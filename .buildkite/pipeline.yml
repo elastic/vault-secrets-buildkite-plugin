@@ -2,7 +2,7 @@ steps:
   - label: "Pre-commit"
     command: ".buildkite/scripts/pre-commit.sh"
     plugins:
-      - elastic/hermit#v1.0.0
+      - elastic/hermit#v1.0.2
     agents:
       image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
   - label: ":sparkles: Buildkite plugin Lint"
