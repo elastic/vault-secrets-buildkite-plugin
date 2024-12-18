@@ -1,7 +1,7 @@
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: "v4.4.0"
+    rev: "v5.0.0"
     hooks:
       - id: check-executables-have-shebangs
       - id: check-json
@@ -24,7 +24,7 @@ repos:
         exclude: (^bin/activate-hermit|^bin/hermit)
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: "0.23.3"
+    rev: "0.30.0"
     hooks:
       - id: check-buildkite
         files: (^.buildkite/pipeline.yml$)
