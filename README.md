@@ -21,6 +21,7 @@ steps:
           field: "<secret-field-name>" # OPTIONAL
           env_var: "<environment-variable-mapping-secret>" # OPTIONAL
           path_depth: "2" # OPTIONAL
+          format: "json" # OPTIONAL
 ```
 
 - `field` specifies the exact Vault secret field to retrieve.
@@ -32,6 +33,7 @@ steps:
   ensure Buildkite will redact the secret, see [the docs][0] for details.
 - `path_depth` specifies the number of elements of the path to use in the variable name when
   `env_var` isn't defined. When not defined the default value is `2`
+- `format` specifies the format used when retrieving a secret
 
 Please refer to the test pipeline and scripts in ths `.buildkite` directory as examples.
 
