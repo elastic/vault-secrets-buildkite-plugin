@@ -1,6 +1,8 @@
 #!/bin/bash
 
-EXPECTED_MESSAGE='{"message":"Hello from Vault"}'
+EXPECTED_MESSAGE='{
+  "message":"Hello from Vault"
+}'
 
 if [ -z "$MESSAGE" ]; then
   echo "[ERROR] MESSAGE variable is empty or not defined."
