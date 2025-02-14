@@ -1,7 +1,7 @@
 #!/bin/bash
 
 EXPECTED_MESSAGE='{
-  "message":"Hello from Vault"
+  "message": "Hello from Vault"
 }'
 
 if [ -z "$MESSAGE" ]; then
