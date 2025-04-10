@@ -16,7 +16,7 @@ metadata:
     - vault
 
 spec:
-  type: tool
+  type: buildkite-plugin
   owner: group:platform-dev-flow
   lifecycle: beta
 
