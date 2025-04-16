@@ -7,7 +7,7 @@ DEFAULT_PATH_DEPTH=2
 check_command() {
   command=$1
   if ! command -v "$command" >/dev/null 2>&1; then
-    echo "Could not find the $command cli"
+    echo "Could not find the $command cli" >&2
     exit 1
   fi
 }
@@ -17,7 +17,7 @@ check_command() {
 # redact secrets (https://buildkite.com/docs/agent/v3/cli-redactor) was added.
 # However, because we may not always run that version of `buildkite-agent`, we
 # should conditionally enable it
-check_buildkite_agent_version_for_redaction() {
+check_buildkite_version() {
   local version_output
   version_output="$(buildkite-agent --version)"
   local version
@@ -26,7 +26,7 @@ check_buildkite_agent_version_for_redaction() {
   if [[ "$(printf '%s\n%s\n' "$min_version" "$version" | sort --version-sort | head -n1)" = "$min_version" ]]; then
     return 0
   else
-    echo "Buildkite agent version $version is less than $min_version. Redactor is not available."
+    echo "Buildkite agent version $version is less than $min_version. Redactor is not available." >&2
     return 1
   fi
 }
@@ -87,10 +87,10 @@ else
 fi
 
 set +x
-if check_buildkite_version; then
+if check_buildkite_agent_version_for_redaction; then
   echo "${secret}" | buildkite-agent redactor add
 else
-  echo "Buildkite agent redactor is not available. Skipping redaction."
+  echo "Buildkite agent redactor is not available. Skipping redaction." >&2
 fi
 
 if [ -n "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}" ]; then
