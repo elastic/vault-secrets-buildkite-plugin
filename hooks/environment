@@ -75,5 +75,5 @@ else
   variable_name=$(generate_variable_name "$BUILDKITE_PLUGIN_VAULT_SECRETS_PATH" "$BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD" "$BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_DEPTH")
   eval "${variable_name}='${secret}'"
   export "${variable_name?}"
-  buildkite-agent redactor add "${secret}" # Redact the secret in Buildkite logs
+  echo "${secret}" | buildkite-agent redactor add # Redact the secret in Buildkite logs
 fi
