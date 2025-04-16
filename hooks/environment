@@ -56,7 +56,7 @@ retry() {
 }
 
 check_command vault
-
+check_command buildkite-agent
 BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_DEPTH=${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_DEPTH:-$DEFAULT_PATH_DEPTH}
 
 secret=""
