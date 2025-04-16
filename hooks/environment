@@ -70,10 +70,10 @@ fi
 if [ -n "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}" ]; then
   eval "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}='${secret}'"
   export "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR?}"
-  echo "{\"${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}\":\"${secret}\"}" | buildkite-agent redactor add --format=json
+  echo "{\"${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}\":\"${secret}\"}"| jq -c . | buildkite-agent redactor add --format=json
 else
   variable_name=$(generate_variable_name "$BUILDKITE_PLUGIN_VAULT_SECRETS_PATH" "$BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD" "$BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_DEPTH")
   eval "${variable_name}='${secret}'"
   export "${variable_name?}"
-  echo "{\"${variable_name}\":\"${secret}\"}" | buildkite-agent redactor add --format=json
+  echo "{\"${variable_name}\":\"${secret}\"}" | jq -c .| buildkite-agent redactor add --format=json
 fi
