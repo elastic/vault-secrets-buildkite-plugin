@@ -7,7 +7,7 @@ DEFAULT_PATH_DEPTH=2
 check_command() {
   command=$1
   if ! command -v "$command" >/dev/null 2>&1; then
-    echo "Could not find the $command cli"
+    echo "Could not find the $command cli" >&2
     exit 1
   fi
 }
