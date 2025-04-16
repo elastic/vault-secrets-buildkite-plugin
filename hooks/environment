@@ -12,6 +12,23 @@ check_command() {
   fi
 }
 
+# the buildkite agent redactor has been added from version 3.66.0 and on. So we need to check it.
+# https://github.com/buildkite/agent/releases/tag/v3.66.0
+check_buildkite_version() {
+  local version_output
+  version_output=$(buildkite-agent --version)
+  local version
+  version=$(echo "$version_output" | grep -oP '\d+\.\d+\.\d+')
+  local min_version="3.66.0"
+  if [ "$(printf '%s\n' "$min_version" "$version" | sort -V | head -n1)" = "$min_version" ]; then
+    return 0
+  else
+    echo "Buildkite agent version $version is less than $min_version. Redactor is not available."
+    return 1
+  fi
+}
+
+
 generate_variable_name() {
   local path=$1
   local field=$2
@@ -56,7 +73,7 @@ retry() {
 }
 
 check_command vault
-
+check_command buildkite-agent
 BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_DEPTH=${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_DEPTH:-$DEFAULT_PATH_DEPTH}
 
 secret=""
@@ -67,13 +84,17 @@ else
   secret=$(retry vault kv get -format=json "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}" | jq -c .data)
 fi
 
+if check_buildkite_version; then
+  echo "${secret}" | buildkite-agent redactor add
+else  
+  echo "Buildkite agent redactor is not available. Skipping redaction."
+fi
+
 if [ -n "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}" ]; then
   eval "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}='${secret}'"
   export "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR?}"
-  buildkite-agent redactor add "${secret}"  # Redact the secret in Buildkite logs
 else
   variable_name=$(generate_variable_name "$BUILDKITE_PLUGIN_VAULT_SECRETS_PATH" "$BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD" "$BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_DEPTH")
   eval "${variable_name}='${secret}'"
   export "${variable_name?}"
-  echo "${secret}" | buildkite-agent redactor add # Redact the secret in Buildkite logs
 fi
