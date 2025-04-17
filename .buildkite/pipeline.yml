@@ -91,7 +91,7 @@ steps:
   - label: "TEST"
     command: "echo $MESSAGE // ${MESSAGE} // $$MESSAGE"
     plugins:
-      - elastic/vault-secrets#test-plugin-pipeline:
+      - elastic/vault-secrets#DEV-290-add-buildkite-redactor-for-secrets:
             path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
             field: "message"
             env_var: "MESSAGE"
