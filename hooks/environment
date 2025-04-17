@@ -66,7 +66,7 @@ else
   check_command jq
   secret=$(retry vault kv get -format=json "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}" | jq -c .data)
 fi
-
+echo "${secret}" | buildkite-agent redactor add
 if [ -n "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}" ]; then
   eval "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR}='${secret}'"
   export "${BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR?}"
