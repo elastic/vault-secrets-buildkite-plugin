@@ -89,9 +89,9 @@ steps:
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
   - label: "TEST"
-    command: "echo $$BUILDKITE_ARTIFACTORY_USER && echo $BUILDKITE_ARTIFACTORY_USER; exit 1"
+    command: "echo $$MESSAGE && echo $MESSAGE; exit 1"
     plugins:
       - elastic/vault-secrets#DEV-290-add-buildkite-redactor-for-secrets:
-          path: "secret/ci/elastic-project-api/artifactory-rw"
-          field: "username"
-          env_var: "BUILDKITE_ARTIFACTORY_USER"
+            path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
+            field: "message"
+            env_var: "MESSAGE"
