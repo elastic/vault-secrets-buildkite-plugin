@@ -95,3 +95,11 @@ steps:
             path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
             field: "message"
             env_var: "MESSAGE"
+
+  - label: "TEST"
+    command: "echo $MESSAGE // ${MESSAGE} // $$MESSAGE"
+    plugins:
+      - elastic/vault-secrets#main:
+            path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
+            field: "message"
+            env_var: "MESSAGE"
