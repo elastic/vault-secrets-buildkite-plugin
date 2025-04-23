@@ -87,7 +87,7 @@ else
 fi
 
 set +x
-if check_buildkite_version; then
+if check_buildkite_agent_version_for_redaction; then
   echo "${secret}" | buildkite-agent redactor add
 else
   echo "Buildkite agent redactor is not available. Skipping redaction." >&2
