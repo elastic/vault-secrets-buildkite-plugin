@@ -23,7 +23,7 @@ check_buildkite_agent_version_for_redaction() {
   local version
   version=$(echo "$version_output" | grep -oP '\d+\.\d+\.\d+')
   local min_version="3.66.0"
-  if [ "$(printf '%s\n%s\n' "$min_version" "$version" | sort --version-sort | head -n1)" = "$min_version" ]; then
+  if [ "$(printf '%s\n' "$min_version" "$version" | sort --version-sort | head -n1)" = "$min_version" ]; then
     return 0
   else
     echo "Buildkite agent version $version is less than $min_version. Redactor is not available." >&2
