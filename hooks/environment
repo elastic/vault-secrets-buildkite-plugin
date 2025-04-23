@@ -17,7 +17,7 @@ check_command() {
 # redact secrets (https://buildkite.com/docs/agent/v3/cli-redactor) was added.
 # However, because we may not always run that version of `buildkite-agent`, we
 # should conditionally enable it
-check_buildkite_version() {
+check_buildkite_agent_version_for_redaction() {
   local version_output
   version_output="$(buildkite-agent --version)"
   local version
