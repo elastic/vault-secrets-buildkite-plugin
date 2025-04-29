@@ -81,6 +81,9 @@ BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_DEPTH=${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_
 secret=""
 if [ -n "${BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD}" ]; then
   secret=$(retry vault kv get -field="${BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD}" "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}")
+  if [ -n "${BUILDKITE_PLUGIN_VAULT_SECRETS_FORMAT}" ]; then
+    secret=$(retry vault kv get -field="${BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD}" -format="${BUILDKITE_PLUGIN_VAULT_SECRETS_FORMAT}" "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}")
+  fi
 else
   check_command jq
   secret=$(retry vault kv get -format=json "${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}" | jq -c .data)

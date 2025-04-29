@@ -12,4 +12,6 @@ configuration:
       type: string
     env_var:
       type: string
+    format:
+      type: string
   additionalProperties: false

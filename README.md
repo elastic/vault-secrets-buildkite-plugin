@@ -16,11 +16,12 @@ Add the following to your `pipeline.yml`:
 steps:
   - command: "<your-command>"
     plugins:
-      - elastic/vault-secrets#v0.0.5:
+      - elastic/vault-secrets#v0.0.6:
           path: "secret/ci/elastic-<repo-name>/<secret-name>"
           field: "<secret-field-name>" # OPTIONAL
           env_var: "<environment-variable-mapping-secret>" # OPTIONAL
           path_depth: "2" # OPTIONAL
+          format: "json" # OPTIONAL
 ```
 
 - `field` specifies the exact Vault secret field to retrieve.
@@ -32,6 +33,8 @@ steps:
   ensure Buildkite will redact the secret, see [the docs][0] for details.
 - `path_depth` specifies the number of elements of the path to use in the variable name when
   `env_var` isn't defined. When not defined the default value is `2`
+- `format` specifies the format used when retrieving a secret, it is optional and can be used when
+  `field` is specified (when `field` isn't defined, the entire secret is retrieved in json format)
 
 Please refer to the test pipeline and scripts in ths `.buildkite` directory as examples.
 
