@@ -36,3 +36,8 @@ steps:
 Please refer to the test pipeline and scripts in ths `.buildkite` directory as examples.
 
 [0]: https://buildkite.com/docs/pipelines/managing-log-output#redacted-environment-variables
+
+## Contributing
+
+You can run `make all` and will run the lint, shellcheck and pre-commit validations locally.
+Those make goals are also running in the CI.
