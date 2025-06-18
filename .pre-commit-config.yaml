@@ -19,9 +19,9 @@ repos:
     rev: "v0.0.18"
     hooks:
       - id: shfmt
-        exclude: (^bin/activate-hermit|^bin/hermit)
+        exclude: (^bin/activate-hermit|^bin/hermit|^tests)
       - id: shellcheck
-        exclude: (^bin/activate-hermit|^bin/hermit)
+        exclude: (^bin/activate-hermit|^bin/hermit|^tests)
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: "0.30.0"

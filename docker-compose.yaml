@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  lint:
+    image: buildkite/plugin-linter
+    command: ['--id', 'elastic/vault-secrets']
+    volumes:
+      - ".:/plugin"
+
+  shellcheck:
+    image: koalaman/shellcheck:latest
+    command: -x hooks/environment
+    working_dir: /plugin
+    volumes:
+      - ".:/plugin"
