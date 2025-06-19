@@ -40,4 +40,4 @@ Please refer to the test pipeline and scripts in ths `.buildkite` directory as e
 ## Contributing
 
 You can run `make all` and will run the lint, shellcheck and pre-commit validations locally.
-Those make goals are also running in the CI.
+Those `make` targets are also running in the CI.
