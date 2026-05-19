@@ -17,7 +17,7 @@ metadata:
 
 spec:
   type: buildkite-plugin
-  owner: group:platform-dev-flow
+  owner: group:ci-systems
   lifecycle: beta
 
 ---
@@ -38,7 +38,7 @@ metadata:
 
 spec:
   type: buildkite-pipeline
-  owner: group:platform-dev-flow
+  owner: group:ci-systems
   system: buildkite
   implementation:
     apiVersion: buildkite.elastic.dev/v1
@@ -53,6 +53,6 @@ spec:
       teams:
         everyone:
           access_level: BUILD_AND_READ
-        release-eng: {}
-        platform-dev-flow:
+        ci-systems: {}
+        ci-systems:
           access_level: MANAGE_BUILD_AND_READ
