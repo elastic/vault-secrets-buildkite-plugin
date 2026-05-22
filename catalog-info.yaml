@@ -53,6 +53,5 @@ spec:
       teams:
         everyone:
           access_level: BUILD_AND_READ
-        ci-systems: {}
         ci-systems:
           access_level: MANAGE_BUILD_AND_READ
