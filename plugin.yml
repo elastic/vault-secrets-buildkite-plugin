@@ -1,7 +1,9 @@
 name: vault-secrets-buildkite-plugin
 description: A buildkite plugin to map Vault secrets to Step environments variables
 author: https://github.com/jmlrt
-requirements: []
+requirements:
+  - buildkite-agent
+  - vault
 configuration:
   properties:
     path:
