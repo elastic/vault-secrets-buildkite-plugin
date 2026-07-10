@@ -4,11 +4,20 @@
 # plugin fetches secrets from Vault at CI runtime and never persists them
 # to disk by design; these patterns are a safety net against a future
 # contributor accidentally committing a local .env/debug/credential file.
+#
+# Patterns are intentionally anchored/specific rather than unanchored
+# substrings like `*secret*` or `*credentials*` -- this repo's own name
+# (vault-secrets-buildkite-plugin) and its documented Vault path
+# convention (e.g. `secret/ci/...`) legitimately contain those words, and
+# a bare substring glob would silently exclude real files/directories
+# (e.g. a future `secret/` dir or `CREDENTIALS.md` doc) with no warning.
 .env
 .env.*
 *.pem
 *.key
 *.p12
 *.pfx
-*credentials*
-*secret*
+credentials.json
+credentials.yml
+credentials.yaml
+*.credentials.json
