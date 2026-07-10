@@ -1,1 +1,14 @@
 .hermit
+
+# Credential/secret-shaped files that should never be committed. This
+# plugin fetches secrets from Vault at CI runtime and never persists them
+# to disk by design; these patterns are a safety net against a future
+# contributor accidentally committing a local .env/debug/credential file.
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*credentials*
+*secret*
