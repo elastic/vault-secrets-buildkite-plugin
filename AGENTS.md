@@ -14,7 +14,8 @@ pipeline step as an environment variable. Configuration is declared in
 
 This is not a self-contained utility used only by this repo's own tests.
 Per Elastic's internal "Buildkite Guidelines"
-(`codex.elastic.dev/r/observability-robots/teams/ci/buildkite/buildkite-guidelines`),
+(`https://codex.elastic.dev/r/observability-robots/teams/ci/buildkite/buildkite-guidelines`
+— internal-only, not reachable outside Elastic's network),
 `elastic/vault-secrets` is the **org-recommended pattern** for accessing Vault
 secrets from any Buildkite pipeline, explicitly preferred over reading Vault
 CI secrets directly in scripts or pre-command hooks. Any pipeline across
@@ -61,7 +62,9 @@ When `env_var` is not set, the environment variable name is derived from
 4. Uppercase the whole string, and replace `.` and `-` with `_`.
 5. Append the literal suffix `_SECRET`.
 
-Result shape: `<UPPERCASE_PATH>[_<FIELD>]_SECRET`.
+Result shape: `<UPPERCASE_PATH>[_<UPPERCASE_FIELD>]_SECRET` — note the field
+portion (if present) is uppercased too, since step 4's `tr` runs on the
+already-field-appended string, not just the path portion.
 
 The `_SECRET` suffix is required, not cosmetic: Buildkite auto-redacts
 environment variables whose names end in `_SECRET` (or match its other
@@ -80,7 +83,11 @@ the `_SECRET` suffix on explicit `env_var` values.
 
 ## Runtime dependencies
 
-`hooks/environment` shells out to:
+`hooks/environment` shells out to a handful of standard Unix utilities
+(`basename`, `rev`, `cut`, `tr`, `grep`, `sort`, `sleep`) that are assumed
+present on any Buildkite worker and aren't declared in `plugin.yml`. The
+dependencies actually worth declaring — because they're non-standard and
+must be separately installed — are:
 
 - `vault` — unconditional (fetches the secret).
 - `buildkite-agent` — unconditional (version check for redaction, and
@@ -89,21 +96,25 @@ the `_SECRET` suffix on explicit `env_var` values.
   secret is fetched as JSON via `vault kv get -format=json ... | jq -c
   .data`). When `field` **is** set, `jq` is not required.
 
-All three are checked with `check_command` at the point of use and the hook
-exits non-zero with a clear message if a required binary is missing.
+`vault`, `buildkite-agent`, and `jq` are each checked with `check_command` at
+the point of use, and the hook exits non-zero with a clear message if one of
+them is missing.
 
 ## Retry behavior
 
-The Vault fetch (`vault kv get ...`) is wrapped in `retry()`, which retries
-up to `MAX_RETRIES=3` attempts total, with a 5-second sleep between failed
-attempts. After the final failed attempt it prints `Command failed after 3
-retries.` to stderr and exits non-zero. There is no configurable override for
-retry count in `plugin.yml` today.
+The Vault fetch (`vault kv get ...`) is wrapped in `retry()`, which executes
+the command up to `MAX_RETRIES=3` times total, sleeping 5 seconds after
+*every* failed attempt — including the 3rd/final one — before the loop
+re-checks its attempt count and exits. So a full exhaustion (all 3 attempts
+fail) takes 3 attempts and 3 five-second sleeps, then prints `Command failed
+after 3 retries.` to stderr and exits non-zero. There is no configurable
+override for retry count in `plugin.yml` today.
 
 ## Secret handling and redaction
 
-- Before the secret value is read into a shell variable, the hook runs
-  `set +x` as a precaution against inherited/ambient shell tracing (the
+- After the secret is fetched into the `secret` shell variable (but before
+  it is used — logged, registered with the redactor, or exported), the hook
+  runs `set +x` as a precaution against inherited/ambient shell tracing (the
   script itself only sets `-eo pipefail`, not `-x`), so the value cannot
   leak into Buildkite's build log via `xtrace` output if tracing was enabled
   by the calling context.
