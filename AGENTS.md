@@ -84,10 +84,16 @@ the `_SECRET` suffix on explicit `env_var` values.
 ## Runtime dependencies
 
 `hooks/environment` shells out to a handful of standard Unix utilities
-(`basename`, `rev`, `cut`, `tr`, `grep`, `sort`, `sleep`) that are assumed
-present on any Buildkite worker and aren't declared in `plugin.yml`. The
-dependencies actually worth declaring — because they're non-standard and
-must be separately installed — are:
+(`basename`, `rev`, `cut`, `tr`, `grep`, `sort`, `head`, `sleep`) that are
+assumed present on any Buildkite worker and aren't declared in `plugin.yml`.
+Note this assumes GNU coreutils specifically, not just "any Unix": the
+version check uses `grep -oP` (Perl-compatible regex, a GNU `grep`
+extension — BSD `grep`, e.g. on macOS, doesn't support `-P`) and
+`sort --version-sort` (a GNU-only long option, not available in BSD
+`sort`). This hook will not run correctly as-is on a BSD/macOS worker
+without GNU coreutils installed and taking precedence in `PATH`. The
+dependencies actually worth declaring in `plugin.yml` — because they're
+non-standard and must be separately installed regardless of platform — are:
 
 - `vault` — unconditional (fetches the secret).
 - `buildkite-agent` — unconditional (version check for redaction, and
