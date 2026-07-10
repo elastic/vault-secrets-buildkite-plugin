@@ -23,7 +23,7 @@ behavior.
 
 Concretely, this means changes to any of the following are **not
 repo-local** — they can silently affect every consuming pipeline, not just
-the 10 test cases under `.buildkite/scripts/`:
+the 9 test cases under `.buildkite/scripts/`:
 
 - The environment-variable naming scheme (see `generate_variable_name` below).
 - Redaction behavior (whether/when a secret is registered with the Buildkite
@@ -39,14 +39,14 @@ CI) before assuming a change is safe.
 
 Properties, all under the `elastic/vault-secrets` plugin key:
 
-| Property | Type | Required | Notes |
-|---|---|---|---|
-| `path` | string | yes | Vault KV path, e.g. `secret/ci/elastic-<repo-name>/<secret-name>`. |
-| `field` | string | no | A specific field within the secret. If omitted, the entire secret is fetched as JSON. |
-| `env_var` | string | no | Explicit environment variable name to assign the secret to. If omitted, a name is generated (see below). |
-| `path_depth` | string | no | Number of trailing path components used when generating the variable name (see below). Defaults to `2`. |
+| Property | Type | Notes |
+|---|---|---|
+| `path` | string | Vault KV path, e.g. `secret/ci/elastic-<repo-name>/<secret-name>`. Not marked `required` in `plugin.yml`'s schema, but functionally necessary: `hooks/environment` uses it unconditionally and will fail at runtime (not at lint/schema time) if it's empty. |
+| `field` | string | A specific field within the secret. If omitted, the entire secret is fetched as JSON. |
+| `env_var` | string | Explicit environment variable name to assign the secret to. If omitted, a name is generated (see below). |
+| `path_depth` | string | Number of trailing path components used when generating the variable name (see below). Defaults to `2`. |
 
-`additionalProperties: false` — no other keys are accepted.
+`additionalProperties: false` — no other keys are accepted. `plugin.yml` does not declare a `required:` list for any property, so nothing at the schema/lint level enforces `path` being set — only `hooks/environment`'s own runtime behavior does.
 
 ## Variable-naming scheme (`generate_variable_name` in `hooks/environment`)
 
@@ -102,9 +102,11 @@ retry count in `plugin.yml` today.
 
 ## Secret handling and redaction
 
-- Before the secret value is read into a shell variable, the hook disables
-  command tracing (`set +x`) so the value cannot leak into Buildkite's build
-  log via `xtrace` output.
+- Before the secret value is read into a shell variable, the hook runs
+  `set +x` as a precaution against inherited/ambient shell tracing (the
+  script itself only sets `-eo pipefail`, not `-x`), so the value cannot
+  leak into Buildkite's build log via `xtrace` output if tracing was enabled
+  by the calling context.
 - `buildkite-agent redactor add` is used to register the fetched secret with
   Buildkite's log redactor — but **only conditionally**. The gate is a
   version check (`check_buildkite_agent_version_for_redaction`): redaction
@@ -124,7 +126,7 @@ retry count in `plugin.yml` today.
 
 There is currently no single documented command (no Makefile) that
 reproduces the CI test/lint loop locally. The real, CI-verified test
-coverage lives at `.buildkite/scripts/test-*.sh` (10 scripts, each asserting
+coverage lives at `.buildkite/scripts/test-*.sh` (9 scripts, each asserting
 a plugin-populated environment variable against an expected value) and is
 run in CI as the "Unit tests" step group in `.buildkite/pipeline.yml`,
 invoking the plugin against a real Vault path
@@ -133,7 +135,9 @@ checks run via `.pre-commit-config.yaml` (`shellcheck`, `shfmt`, YAML/JSON
 schema checks), invoked in CI through
 `.buildkite/scripts/pre-commit.sh`.
 
-Note: an open PR (#40) previously attempted to wire local dev tooling
-(Makefile + docker-compose) but stalled on mocking Bash builtins for BATS
-testing; see that PR and any linked follow-up issue for current status
-before assuming a `make test` entry point exists.
+Note: [PR #40](https://github.com/elastic/vault-secrets-buildkite-plugin/pull/40)
+previously attempted to wire local dev tooling (Makefile + docker-compose)
+but stalled specifically on mocking the `command` builtin for BATS testing
+(per its own PR description), and depends on a separate, since-closed PR
+(#39). See that PR and any linked follow-up issue for current status before
+assuming a `make test` entry point exists.
