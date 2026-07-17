@@ -94,6 +94,10 @@ elif ! echo "${secret}" | buildkite-agent redactor add; then
   redaction_skip_reason="redactor add command failed"
 fi
 
+# For now, we don't fail the build if the redaction fails,
+# because the old OS images we use would all fail then.
+# If we want to switch this to a hard failure, we could simply
+# add exit 1
 if [[ -n "$redaction_skip_reason" ]]; then
   echo "WARNING: Secret redaction unavailable (${redaction_skip_reason}). The secret may appear in plain text in build logs." >&2
   buildkite-agent annotate --style=warning "vault-secrets-buildkite-plugin: Secret redaction unavailable (${redaction_skip_reason}). The secret retrieved from '${BUILDKITE_PLUGIN_VAULT_SECRETS_PATH}' may be visible in build logs."
