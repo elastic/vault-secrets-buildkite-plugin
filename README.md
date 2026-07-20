@@ -39,18 +39,18 @@ Please refer to the test pipeline and scripts in ths `.buildkite` directory as e
 
 ## Testing
 
-To test changes on a branch before merging, reference the plugin directly by branch name in your pipeline:
+To test changes on a branch before merging, reference the plugin directly by branch name or commit SHA instead of a version tag. Buildkite fetches the plugin from GitHub at the specified ref, so the branch does not need to be merged first.
 
-```
+```yml
 steps:
   - command: "<your-command>"
     plugins:
-      - elastic/vault-secrets#your-branch-name:
+      - elastic/vault-secrets#0.0.1:
           path: "secret/ci/elastic-<repo-name>/<secret-name>"
           field: "field name" # Optional based on secret structure
 ```
 
-Buildkite fetches the plugin from GitHub at the specified ref, so the branch does not need to be merged first.
+> Replace `0.0.1` with your branch name or commit SHA!
 
 For testing in Flavortown, you should ensure:
 1. That the pipeline has `gobld-pipelines` set as the team for testing
