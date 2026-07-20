@@ -41,7 +41,7 @@ Please refer to the test pipeline and scripts in ths `.buildkite` directory as e
 
 To test changes on a branch before merging, reference the plugin directly by branch name in your pipeline:
 
-```yml
+```
 steps:
   - command: "<your-command>"
     plugins:
