@@ -52,7 +52,7 @@ steps:
 
 Buildkite fetches the plugin from GitHub at the specified ref, so the branch does not need to be merged first.
 
-For testing in Flavortown, you should ensure: 
+For testing in Flavortown, you should ensure:
 1. That the pipeline has `gobld-pipelines` set as the team for testing
 2. The secret you are attempting to fetch is available in `ci-dev`
 
