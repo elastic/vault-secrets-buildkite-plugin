@@ -36,3 +36,25 @@ steps:
 Please refer to the test pipeline and scripts in ths `.buildkite` directory as examples.
 
 [0]: https://buildkite.com/docs/pipelines/managing-log-output#redacted-environment-variables
+
+## Testing
+
+To test changes on a branch before merging, reference the plugin directly by branch name or commit SHA instead of a version tag (e.g. `elastic/vault-secrets#your-branch-name`). Buildkite fetches the plugin from GitHub at the specified ref, so the branch does not need to be merged first.
+
+For testing in Flavortown, you should ensure:
+1. That the pipeline has `gobld-pipelines` set as the team for testing
+2. The secret you are attempting to fetch is available in `ci-dev`
+
+> NOTE: You can use a known existing secret or you can copy over another secret ([civet can help with this](https://github.com/elastic/civet#copy-secrets-replaces-vault-cp-and-works-across-vaults)), but just make sure you remove it from `ci-dev` after testing.
+
+## Releases
+
+Releases follow the standard GitHub Releases flow:
+
+1. Merge your changes to `main`
+2. Navigate to the [Releases page](https://github.com/elastic/vault-secrets-buildkite-plugin/releases) and draft a new release
+3. Create a new tag following semantic versioning (e.g. `v0.2.0`)
+4. Generate or write release notes describing the changes
+5. Publish the release
+
+Once published, the new tag can be referenced in pipelines (e.g. `elastic/vault-secrets#v0.2.0`).
