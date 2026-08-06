@@ -6,7 +6,9 @@ A simple buildkite plugin to map a Vault secret to a Step environment variable
 
 ## Requirements
 
-`vault` and `jq` are expected to be installed on your Buildkite worker.
+`vault` and `buildkite-agent` are expected to be installed on your Buildkite
+worker. `jq` is also required, but only when the `field` property (see
+below) is not set.
 
 ## Usage
 
