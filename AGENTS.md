@@ -141,20 +141,20 @@ override for retry count in `plugin.yml` today.
 
 ## Local dev / test loop
 
-There is currently no single documented command (no Makefile) that
-reproduces the CI test/lint loop locally. The real, CI-verified test
-coverage lives at `.buildkite/scripts/test-*.sh` (9 scripts, each asserting
-a plugin-populated environment variable against an expected value) and is
-run in CI as the "Unit tests" step group in `.buildkite/pipeline.yml`,
-invoking the plugin against a real Vault path
-(`secret/ci/elastic-vault-secrets-buildkite-plugin/test`). Lint/format
-checks run via `.pre-commit-config.yaml` (`shellcheck`, `shfmt`, YAML/JSON
-schema checks), invoked in CI through
-`.buildkite/scripts/pre-commit.sh`.
+Run the isolated BATS tests with `make test`; this uses Docker Compose v2 and
+stubs Vault, Buildkite, and sleep commands. The two BATS success tests verify
+child-process exports for field and full-JSON retrieval; a third test covers
+Vault retry exhaustion without waiting. CI also runs nine integration checks in
+`.buildkite/scripts/test-*.sh` against a real Vault path
+(`secret/ci/elastic-vault-secrets-buildkite-plugin/test`), covering
+environment-variable mappings. Neither suite currently covers missing-command
+failures or redaction fallbacks. Lint/format checks run
+via `.pre-commit-config.yaml` (`shellcheck`, `shfmt`, YAML/JSON schema checks),
+invoked in CI through `.buildkite/scripts/pre-commit.sh`.
 
 Note: [PR #40](https://github.com/elastic/vault-secrets-buildkite-plugin/pull/40)
 previously attempted to wire local dev tooling (Makefile + docker-compose)
 but stalled specifically on mocking the `command` builtin for BATS testing
-(per its own PR description), and depends on a separate, since-closed PR
-(#39). See that PR and any linked follow-up issue for current status before
-assuming a `make test` entry point exists.
+(per its own PR description), and depended on a separate, since-closed PR
+(#39). This setup uses executable stubs on `PATH`, so the hook's
+`command -v` dependency check does not need to be mocked.
