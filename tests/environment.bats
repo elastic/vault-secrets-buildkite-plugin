@@ -45,3 +45,26 @@ setup() {
   assert_success
   assert_output '{"message":"hello-from-vault"}'
 }
+
+@test "fails after exhausting Vault retries" {
+  export BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD=message
+
+  stub vault \
+    "kv get -field=message secret/ci/example/service : printf x >> \"$BATS_TEST_TMPDIR/vault-attempts\"; exit 1" \
+    "kv get -field=message secret/ci/example/service : printf x >> \"$BATS_TEST_TMPDIR/vault-attempts\"; exit 1" \
+    "kv get -field=message secret/ci/example/service : printf x >> \"$BATS_TEST_TMPDIR/vault-attempts\"; exit 1"
+  stub buildkite-agent \
+    "--version : echo 3.66.0" \
+    "redactor add : true"
+  stub sleep \
+    "5 : printf x >> \"$BATS_TEST_TMPDIR/sleep-attempts\"" \
+    "5 : printf x >> \"$BATS_TEST_TMPDIR/sleep-attempts\"" \
+    "5 : printf x >> \"$BATS_TEST_TMPDIR/sleep-attempts\""
+
+  run bash -c 'source hooks/environment'
+
+  assert_failure
+  assert_output --partial "Command failed after 3 retries."
+  assert_equal "$(cat "$BATS_TEST_TMPDIR/vault-attempts")" "xxx"
+  assert_equal "$(cat "$BATS_TEST_TMPDIR/sleep-attempts")" "xxx"
+}
