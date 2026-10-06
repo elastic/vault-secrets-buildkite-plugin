@@ -38,7 +38,7 @@ setup() {
   stub grep '-oP * : echo 3.66.0'
   stub sort '--version-sort : echo 3.66.0'
 
-  run bash -c 'source hooks/environment; printf "%s" "$EXAMPLE_SERVICE_SECRET"'
+  run bash -c 'source hooks/environment; printenv EXAMPLE_SERVICE_SECRET'
 
   unstub grep
   unstub sort
