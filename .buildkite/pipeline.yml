@@ -1,4 +1,9 @@
 steps:
+  - label: "Unit tests (BATS)"
+    command: "make test"
+    agents:
+      provider: "gcp"
+      image: family/core-ubuntu-2204
   - label: "Pre-commit"
     command: ".buildkite/scripts/pre-commit.sh"
     plugins:

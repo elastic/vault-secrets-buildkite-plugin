@@ -60,3 +60,18 @@ Releases follow the standard GitHub Releases flow:
 5. Publish the release
 
 Once published, the new tag can be referenced in pipelines (e.g. `elastic/vault-secrets#v0.2.0`).
+
+## Local tests
+
+The small BATS suite runs in Docker Compose and stubs Vault and Buildkite
+commands, so it does not need access to Vault or a Buildkite agent. Docker
+Compose v2 is required.
+
+```sh
+make test
+```
+
+The initial BATS test covers successful field retrieval into an explicitly
+named variable. The nine existing Buildkite integration checks exercise
+environment-variable mappings against Vault. Retry exhaustion, missing
+commands, and redaction fallbacks are not yet covered.

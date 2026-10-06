@@ -1,0 +1,8 @@
+services:
+  test:
+    image: buildkite/plugin-tester:v4.3.0
+    working_dir: /plugin
+    command: ["bats", "--show-output-of-passing-tests", "--verbose-run", "tests/"]
+    network_mode: none
+    volumes:
+      - ".:/plugin:ro"
