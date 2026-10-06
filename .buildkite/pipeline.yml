@@ -1,5 +1,5 @@
 steps:
-  - label: "Unit tests (BATS)"
+  - label: "E2E tests (BATS)"
     command: "make test"
     agents:
       provider: "gcp"
@@ -17,9 +17,9 @@ steps:
     agents:
       provider: "gcp"
       image: family/core-ubuntu-2204
-  - group: "Unit tests"
+  - group: "E2E tests"
     steps:
-      - label: "Unit test field with variable mapping"
+      - label: "E2E test field with variable mapping"
         command: ".buildkite/scripts/test-field-var-mapping.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
@@ -28,7 +28,7 @@ steps:
               env_var: "MESSAGE"
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
-      - label: "Unit test json with variable mapping"
+      - label: "E2E test json with variable mapping"
         command: ".buildkite/scripts/test-json-var-mapping.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
@@ -36,7 +36,7 @@ steps:
               env_var: "MESSAGE"
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
-      - label: "Unit test field with variable based on secret path"
+      - label: "E2E test field with variable based on secret path"
         command: ".buildkite/scripts/test-field.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
@@ -44,14 +44,14 @@ steps:
               field: "message"
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
-      - label: "Unit test json with variable based on secret path"
+      - label: "E2E test json with variable based on secret path"
         command: ".buildkite/scripts/test-json.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
               path: "secret/ci/elastic-vault-secrets-buildkite-plugin/test"
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
-      - label: "Unit test field with variable based on secret path and depth 1"
+      - label: "E2E test field with variable based on secret path and depth 1"
         command: ".buildkite/scripts/test-field-path-depth-1.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
@@ -60,7 +60,7 @@ steps:
               path_depth: "1"
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
-      - label: "Unit test json with variable based on secret path and depth 1"
+      - label: "E2E test json with variable based on secret path and depth 1"
         command: ".buildkite/scripts/test-json-path-depth-1.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
@@ -68,7 +68,7 @@ steps:
               path_depth: "1"
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
-      - label: "Unit test field with variable based on secret path and depth 3"
+      - label: "E2E test field with variable based on secret path and depth 3"
         command: ".buildkite/scripts/test-field-path-depth-3.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
@@ -77,7 +77,7 @@ steps:
               path_depth: "3"
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
-      - label: "Unit test json with variable based on secret path and depth 1"
+      - label: "E2E test json with variable based on secret path and depth 3"
         command: ".buildkite/scripts/test-json-path-depth-3.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
@@ -85,7 +85,7 @@ steps:
               path_depth: "3"
         agents:
           image: "docker.elastic.co/ci-agent-images/ubuntu-build-essential:latest@sha256:923bde2b5cced21dc9694119a5bd142789ba77146a0f813212c4cebd96971151"
-      - label: "Unit test variable based on secret path with dots and depth 1"
+      - label: "E2E test variable based on secret path with dots and depth 1"
         command: ".buildkite/scripts/test-path.sh"
         plugins:
           - elastic/vault-secrets#$BUILDKITE_COMMIT:
