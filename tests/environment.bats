@@ -9,7 +9,11 @@ setup() {
   export BUILDKITE_PLUGIN_VAULT_SECRETS_PATH_DEPTH=""
 }
 
+# shellcheck disable=SC2030
 @test "exports a selected Vault field to the requested variable" {
+  export BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD=message
+  export BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR=TEST_MESSAGE_SECRET
+
   stub vault \
     "kv get -field=message secret/ci/example/service : echo hello-from-vault"
   stub buildkite-agent \
@@ -18,10 +22,7 @@ setup() {
   stub grep '-oP * : echo 3.66.0'
   stub sort '--version-sort : echo 3.66.0'
 
-  run env \
-    BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD=message \
-    BUILDKITE_PLUGIN_VAULT_SECRETS_ENV_VAR=TEST_MESSAGE_SECRET \
-    bash -c 'source hooks/environment; printenv TEST_MESSAGE_SECRET'
+  run bash -c 'source hooks/environment; printenv TEST_MESSAGE_SECRET'
 
   unstub grep
   unstub sort
@@ -46,6 +47,7 @@ setup() {
   assert_output '{"message":"hello-from-vault"}'
 }
 
+# shellcheck disable=SC2031
 @test "fails after exhausting Vault retries" {
   stub vault \
     "kv get -field=message secret/ci/example/service : printf x >> \"$BATS_TEST_TMPDIR/vault-attempts\"; exit 1" \
@@ -59,7 +61,9 @@ setup() {
     "5 : printf x >> \"$BATS_TEST_TMPDIR/sleep-attempts\"" \
     "5 : printf x >> \"$BATS_TEST_TMPDIR/sleep-attempts\""
 
-  run env BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD=message bash -c 'source hooks/environment'
+  export BUILDKITE_PLUGIN_VAULT_SECRETS_FIELD=message
+
+  run bash -c 'source hooks/environment'
 
   assert_failure
   assert_output --partial "Command failed after 3 retries."
