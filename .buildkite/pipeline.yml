@@ -1,5 +1,5 @@
 steps:
-  - label: "E2E tests (BATS)"
+  - label: "Unit tests (BATS)"
     command: "make test"
     agents:
       provider: "gcp"
