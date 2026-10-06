@@ -142,9 +142,9 @@ override for retry count in `plugin.yml` today.
 ## Local dev / test loop
 
 Run the isolated BATS tests with `make test`; this uses Docker Compose v2 and
-stubs Vault and Buildkite commands. The initial BATS test covers successful
-field retrieval into an explicitly named variable. CI also runs nine
-integration checks in
+stubs Vault and Buildkite commands. The two BATS tests cover successful field
+retrieval into an explicitly named variable and full-JSON retrieval into the
+generated variable name. CI also runs nine integration checks in
 `.buildkite/scripts/test-*.sh` against a real Vault path
 (`secret/ci/elastic-vault-secrets-buildkite-plugin/test`), covering
 environment-variable mappings. Neither suite currently covers retry

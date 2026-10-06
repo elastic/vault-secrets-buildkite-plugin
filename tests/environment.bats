@@ -28,3 +28,20 @@ setup() {
   assert_success
   assert_output "hello-from-vault"
 }
+
+@test "exports the full Vault secret as JSON under the generated variable name" {
+  stub vault \
+    "kv get -format=json secret/ci/example/service : echo '{\"data\":{\"message\":\"hello-from-vault\"}}'"
+  stub buildkite-agent \
+    "--version : echo 3.66.0" \
+    "redactor add : true"
+  stub grep '-oP * : echo 3.66.0'
+  stub sort '--version-sort : echo 3.66.0'
+
+  run bash -c 'source hooks/environment; printf "%s" "$EXAMPLE_SERVICE_SECRET"'
+
+  unstub grep
+  unstub sort
+  assert_success
+  assert_output '{"message":"hello-from-vault"}'
+}

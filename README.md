@@ -71,7 +71,8 @@ Compose v2 is required.
 make test
 ```
 
-The initial BATS test covers successful field retrieval into an explicitly
-named variable. The nine existing Buildkite integration checks exercise
-environment-variable mappings against Vault. Retry exhaustion, missing
-commands, and redaction fallbacks are not yet covered.
+The BATS tests cover successful field retrieval into an explicitly named
+variable and full-JSON retrieval into the generated variable name. The nine
+existing Buildkite integration checks exercise environment-variable mappings
+against Vault. Retry exhaustion, missing commands, and redaction fallbacks are
+not yet covered.
