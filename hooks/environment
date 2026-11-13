@@ -12,24 +12,8 @@ check_command() {
   fi
 }
 
-# In `buildkite-agent` 3.66.0
-# (https://github.com/buildkite/agent/releases/tag/v3.66.0) the ability to
-# redact secrets (https://buildkite.com/docs/agent/v3/cli-redactor) was added.
-# However, because we may not always run that version of `buildkite-agent`, we
-# should conditionally enable it
-check_buildkite_agent_version_for_redaction() {
-  local version_output
-  version_output="$(buildkite-agent --version)"
-  local version
-  version="$(echo "$version_output" | grep -oP '\d+\.\d+\.\d+')"
-  local min_version="3.66.0"
-  if [[ "$(printf '%s\n%s\n' "$min_version" "$version" | sort --version-sort | head -n1)" = "$min_version" ]]; then
-    return 0
-  else
-    echo "Buildkite agent version $version is less than $min_version. Redactor is not available." >&2
-    return 1
-  fi
-}
+# shellcheck source=hooks/lib.sh
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
 generate_variable_name() {
   local path=$1
@@ -88,8 +72,8 @@ fi
 
 set +x
 redaction_skip_reason=""
-if ! check_buildkite_agent_version_for_redaction; then
-  redaction_skip_reason="requires buildkite-agent >= 3.66.0"
+if ! redaction_skip_reason=$(check_buildkite_agent_version_for_redaction); then
+  :
 elif ! echo "${secret}" | buildkite-agent redactor add; then
   redaction_skip_reason="redactor add command failed"
 fi
